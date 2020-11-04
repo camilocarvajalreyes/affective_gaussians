@@ -6,8 +6,8 @@ import os
 import os, re
 import operator
 import sys
-import pandas as pd
-from ggplot import * # TODO - make this compatible
+#import pandas as pd
+#from ggplot import * # TODO - make this compatible
 
 # Retrict to CPU only
 os.environ["CUDA_VISIBLE_DEVICES"]=""
@@ -381,7 +381,8 @@ class Word2GM(object):
                 config = projector.ProjectorConfig()
                 embedding = config.embeddings.add()
                 embedding.tensor_name = embedding_var.name
-                embedding.metadata_path = os.path.join(emb_logdir, 'labels.csv')
+                #embedding.metadata_path = os.path.join(emb_logdir, 'labels.csv')
+                embedding.metadata_path = os.path.join('labels.csv')
                 projector.visualize_embeddings(summary_writer, config)
         if call_tensorboard:
             call(["tensorboard", "--logdir={}".format(emb_logdir)])
