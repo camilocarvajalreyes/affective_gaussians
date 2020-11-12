@@ -20,10 +20,14 @@ The instructions bellow allow for visualisation using TensorBoard. It requires a
 
 After a few seconds, the embeddings should appear on the corresponding port.
 
---
+---
 ## Bayesian Skip-gram
 Similarly as with word2gm, the code is adapted from the [BSG repository](https://github.com/abrazinskas/BSG), which also contains the link to the original paper and the citation information. For the moment, we only focus on the execution of [pre-trained representations](https://drive.google.com/file/d/1YQQHFV215YjKLlvxpxsKWLm__TlQMw1Q/view) provided by the author. 
 
 The notebook allows for comparing words using Kullback-Leibler divergence, which is not possible when using euclidean word embeddings. The asymmetric behaviour of the KL-divergence allows for the entailement prediction (see examples in the notebook). 
 
 The only requirement is numpy. All the functions are defined in eval_support.py which is directly taken from the original repository. The [pre-trained parameters](https://drive.google.com/file/d/1YQQHFV215YjKLlvxpxsKWLm__TlQMw1Q/view) of the gaussian vectors must be downloaded to the folder **BSG/pretrained_vectors**
+
+---
+## Visualisation of Gaussians
+In `Visualising Gaussian Embeddings.ipynb` we plot different emotional words using the information of their variance. Pre-trained Gaussian representations are taken from the [BSG repository](https://github.com/abrazinskas/BSG) and different dimensionality reductions are compared.
