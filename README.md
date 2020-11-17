@@ -31,3 +31,7 @@ The only requirement is numpy. All the functions are defined in eval_support.py 
 ---
 ## Visualisation of Gaussians
 In `Visualising Gaussian Embeddings.ipynb` we plot different emotional words using the information of their variance. Pre-trained Gaussian representations are taken from the [BSG repository](https://github.com/abrazinskas/BSG) and different dimensionality reductions are compared.
+
+---
+## Algorithm
+Under construction
