@@ -114,6 +114,7 @@ class Vocabulary:
                         self.special_symbols[token] = word_obj
 
         self.add_special_symbols(DEFAULT_SPECIAL_SYMBOLS)
+        print("Vocabulary loaded from " + vocab_file_path)
 
     def create(self, data_iterator, vocab_file_path, target_positions=[0], sep=' '):
         """
