@@ -12,13 +12,9 @@ The instructions bellow allow for visualisation using TensorBoard. It requires a
 
 2. [The trained model](https://bens-embeddings.s3-us-west-2.amazonaws.com/embeddings_project/word2gm_d50/w2gm-k2-d50.tar.gz) has to be downloaded to: **word2gm/modelfiles/w2gm-k2-d50**
 
-3. Run the first four cells in Analyze Model.ipynb. The rest of the cells show results and examples from the author, but running them will raise an error.
+3. Run the first five cells in Analyze Model.ipynb. The rest of the cells show results and examples from the author, but running them will raise an error.
 
-4. Finally, the following command has to be executed from the command line:
-
-`tensorboard --logdir=word2gm/modelfiles/w2gm-k2-d50_emb --port=8889`
-
-After a few seconds, the embeddings should appear on the corresponding port.
+After a few seconds, the embeddings should appear on the corresponding port and displayed within the notebook.
 
 ---
 ## Bayesian Skip-gram
