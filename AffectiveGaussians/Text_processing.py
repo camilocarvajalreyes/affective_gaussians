@@ -1,3 +1,5 @@
+""" Vocabulary class defintion, file management text related auxiliary functions """
+
 import unicodedata
 import os
 import glob
@@ -11,7 +13,7 @@ PAD_TOKEN = "<PAD>"
 UNK_TOKEN = "<UNK>"
 DEFAULT_SPECIAL_SYMBOLS = {PAD_TOKEN, UNK_TOKEN}
 
-#def of tokeniser
+#import torchtext
 #tokenizer = torchtext.data.get_tokenizer("basic_english")
 
 #sentence = "I'd like to go to the café tonight. What do you think?"
