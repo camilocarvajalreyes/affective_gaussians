@@ -1,5 +1,6 @@
-""" BSG encoder, based on Variational auto-encoder """
+"""  BSG encoder, based on Variational auto-encoder """
 import torch
+
 
 class Encoder(torch.nn.Module):
     """
@@ -26,10 +27,9 @@ class Encoder(torch.nn.Module):
         contexts = torch.unbind(context_embs,dim=1)
         all_contexts_centre = torch.empty(size=(context_embs.shape[1],1,self.input_dim))
         for i, context in enumerate(contexts):
-            joint = torch.cat([centre,context],dim=1)
+            joint = torch.cat([centre_emb,context],dim=1)
             all_contexts_centre[i] = joint
-        sum_contexts_centre = torch.sum(all_contexts_centre,dim=0)
-        return sum_contexts_centre
+        return all_contexts_centre
 
     def forward(self, centre_mu, centre_sigma, context_embs):
         """
@@ -38,16 +38,18 @@ class Encoder(torch.nn.Module):
         :context_embs: tensor of shape (# of contexts,latent_dim,1) - mus of context words stacked
         """
         centre = torch.cat([centre_mu,centre_sigma],dim=1) #see: https://pytorch.org/docs/stable/generated/torch.cat.html
-        sum_centre_context = self.combine_centre_context(centre, context_embs)
-        h = self.linear_hidden(sum_centre_context)
-        h = self.non_linearity(h)
+        all_centre_context = self.combine_centre_context(centre, context_embs)
+        all_h = self.linear_hidden(all_centre_context)
+        all_h = self.non_linearity(all_h)
+        h = torch.sum(all_h, dim=0)
         mu_q = self.linear_mu(h)
         sigma_q = self.linear_sigma(h) # this really corresponds to log sigma squared
-        return mu_q, torch.exp(sigma_q)
+        return mu_q, torch.exp(sigma_q) 
+
 
 #tests
 """
-mu_centre = torch.tensor([[ 0.5,-0.3]])
+mu_centre = torch.tensor([[ 0.5,-0.3]]) 
 sigma = torch.tensor([[0.1]])
 centre = torch.cat([mu_centre,sigma],dim=1)
 context = torch.tensor([[ -0.4,0.25]])
@@ -63,6 +65,17 @@ nonLinearity = torch.nn.ReLU()
 ###########
 encoder = Encoder(dim,latent_dim,latent_dim,sigma.shape[1],nonLinearity)
 combined = encoder.combine_centre_context(centre,contexts)
+print('combined')
+print(combined)
+print(combined.shape)
+print('layer')
+print(encoder.linear_hidden.weight)
+print(encoder.linear_hidden.bias)
+print(encoder.linear_hidden(combined))
+print(encoder.linear_hidden(combined).shape)
+print('summed')
+print(torch.sum(combined,dim=0))
+print(torch.sum(combined,dim=0).shape)
 mu_q, sigma_q = encoder.forward(mu_centre,sigma,contexts)
 print(mu_q)
 print(sigma_q)
