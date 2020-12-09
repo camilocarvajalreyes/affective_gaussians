@@ -43,24 +43,11 @@ class BSG(torch.nn.Module):
         elif cov_mat == 'spherical':
             var_dim = latent_dim
         elif cov_mat == 'full':
-            var_dim == latent_dim*latent_dim
+            #var_dim == latent_dim*latent_dim
+            raise NotImplementedError("For using full cov matrices, KL div definition would need to be updated")
         else:
             raise ValueError('"cov_mat" must be "diagonal, "spherical or "full ')
         return var_dim
-
-    def combine_centre_context(self, centre_mu, centre_sigma, context_embs):
-        """
-        :centre_emb: tensor with representation of centre word
-        :context_embs: tensor of shape (# of contexts,latent_dim,1) - mus of context words stacked
-        :return: contatenations between centre word and each of the context words
-        """
-        centre_emb = torch.cat([centre_mu,centre_sigma],dim=1)
-        contexts = torch.unbind(context_embs,dim=1)
-        all_contexts_centre = torch.empty(size=(context_embs.shape[1],1,self.input_dim))
-        for i, context in enumerate(contexts):
-            joint = torch.cat([centre_emb,context],dim=1)
-            all_contexts_centre[i] = joint
-        return all_contexts_centre
 
     def max_margin(self, mu_q, sigma_q, pos_context_words, neg_context_words):
         """ Computes a sum over context words margin(hinge loss).
@@ -83,16 +70,7 @@ def kl_div(mu_q, sigma_q, mu_p, sigma_p):
     See: https://pytorch.org/docs/stable/distributions.html
     :return: tensor [batch_size x 1]  #CHECK
     """
-    q = LowRankMultivariateNormal(mu_q,sigma_q,torch.ones(2)) #check
-    p = LowRankMultivariateNormal(mu_p,sigma_p,torch.ones(2))
+    q = LowRankMultivariateNormal(mu_q,torch.tensor([[0.],[0.]]),sigma_q*torch.ones(2))
+    p = LowRankMultivariateNormal(mu_p,torch.tensor([[0.],[0.]]),sigma_p*torch.ones(2))
 
     return kl_divergence(q,p)
-
-
-"""
-def write_vectors(vocab, file_path):
-    #see: https://github.com/abrazinskas/BSG/blob/80089f9ec4302096ca6c81e79145ec5685c8d26e/models/bword2vec.py#L32
-#see (writing): https://github.com/abrazinskas/BSG/blob/80089f9ec4302096ca6c81e79145ec5685c8d26e/models/support.py#L82
-#see: https://github.com/abrazinskas/BSG/blob/80089f9ec4302096ca6c81e79145ec5685c8d26e/models/bsg.py#L166
-#see(fetching embeddings): https://github.com/abrazinskas/BSG/blob/80089f9ec4302096ca6c81e79145ec5685c8d26e/models/bsg.py#L123
-return"""
