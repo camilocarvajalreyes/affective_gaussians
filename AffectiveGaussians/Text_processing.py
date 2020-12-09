@@ -1,6 +1,5 @@
 """ Vocabulary class defintion, file management text related auxiliary functions """
 
-import unicodedata
 import os
 import glob
 import itertools
@@ -22,7 +21,9 @@ DEFAULT_SPECIAL_SYMBOLS = {PAD_TOKEN, UNK_TOKEN}
 
 # getting text data files from directory
 #from https://github.com/abrazinskas/BSG/blob/80089f9ec4302096ca6c81e79145ec5685c8d26e/libraries/utils/paths_and_files.py#L12
-def get_file_paths(path, return_file_names=False):
+
+
+def get_file_paths(path, return_file_names=False): #REPLACE
     """
     :param path:
     :return: :rtype: a list of filepaths that are in the folder
@@ -36,6 +37,7 @@ def get_file_paths(path, return_file_names=False):
         paths = [(p, p.split('/')[-1]) for p in paths]
     return paths
 
+
 def create_folders_if_not_exist(filename):
     if os.path.dirname(filename) and not os.path.exists(os.path.dirname(filename)):
         try:
@@ -44,9 +46,8 @@ def create_folders_if_not_exist(filename):
             if exc.errno != errno.EEXIST:
                 raise
 
-#iterator
+
 class TextDataIterator():
-    
     def __init__(self, data_path, tokenizer):
         """
         Text data iterator for open text, that returns tokenized sentences. Assumes that each sentence is separated
@@ -62,6 +63,7 @@ class TextDataIterator():
                     tokens = self.tokenizer(line)
                     yield tokens,
 
+
 """#Example
 path = "C:\\Users\\fast\\camilo\\affective_gaussians\\BSG\\data"
 data_iterator = TextDataIterator(path,tokenizer)
@@ -73,6 +75,7 @@ for token in data_iterator:
     print('----------------------------------------------')
     if s>20:
         break"""
+
 
 class Word:
     def __init__(self, token, id, count):
@@ -164,7 +167,7 @@ class Vocabulary:
                     continue
                 try:
                     f.write(sep.join([str(word.token), str(word.count)]) + "\n")
-                except:
+                except Exception:
                     #raise ValueError("could not process %s" % word.token)
                     pass
         print("Vocabulary written to " + file_path)
@@ -250,11 +253,20 @@ def match_special_symbol(token):
     """
     return re.match(r'<[A-Z]+>', token)
 
+
 def sort_hash(hash, by_key=True, reverse=True):
-        if by_key:
-            indx = 0
-        else:
-            indx = 1
-        return sorted(hash.items(), key=operator.itemgetter(indx), reverse=reverse)
+    if by_key:
+        indx = 0
+    else:
+        indx = 1
+    return sorted(hash.items(), key=operator.itemgetter(indx), reverse=reverse)
+
 
 #maybe to use later: https://pytorch.org/text/data_utils.html#ngrams-iterator
+
+"""
+# Hyper-parameters # Text processing
+half_window_size = 5  # (one sided)
+subsampling_threshold = None
+nr_neg_samples = 10
+max_vocab_size = 10000"""
